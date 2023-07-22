@@ -168,7 +168,7 @@ in {
   };
 
   pypy310 = callPackage ./pypy {
-    self = __splicedPackages.pypy39;
+    self = __splicedPackages.pypy310;
     sourceVersion = {
       major = "7";
       minor = "3";
