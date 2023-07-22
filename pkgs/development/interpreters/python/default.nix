@@ -167,6 +167,23 @@ in {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  pypy310 = callPackage ./pypy {
+    self = __splicedPackages.pypy39;
+    sourceVersion = {
+      major = "7";
+      minor = "3";
+      patch = "12";
+    };
+
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    pythonVersion = "3.10";
+    db = db.override { dbmSupport = !stdenv.isDarwin; };
+    python = __splicedPackages.pypy27;
+    inherit passthruFun;
+    inherit (darwin) libunwind;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   pypy38 = __splicedPackages.pypy39.override {
     self = __splicedPackages.pythonInterpreters.pypy38;
     pythonVersion = "3.8";
@@ -212,8 +229,25 @@ in {
     inherit passthruFun;
   };
 
+  pypy310_prebuilt = callPackage ./pypy/prebuilt.nix {
+    # Not included at top-level
+    self = __splicedPackages.pythonInterpreters.pypy38_prebuilt;
+    sourceVersion = {
+      major = "7";
+      minor = "3";
+      patch = "12";
+    };
+    hash = {
+      aarch64-linux = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+      x86_64-linux = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+      aarch64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+      x86_64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    }.${stdenv.system};
+    pythonVersion = "3.10";
+    inherit passthruFun;
+  };
+
   rustpython = darwin.apple_sdk_11_0.callPackage ./rustpython/default.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
   };
-
 })
